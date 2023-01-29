@@ -25,3 +25,5 @@ Visit `127.0.0.1:8848/nacos` on Browser.
 The default username and password is `nacos`.
 
 ## End
+
+Just an Example
