@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  # Nacos
+  nacos:
+    image: nacos/nacos-server:latest
+    ports:
+      - "8848:8848"
+    environment:
+      MODE: standalone
+
+

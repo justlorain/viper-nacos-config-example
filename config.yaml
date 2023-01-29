@@ -1,5 +1,5 @@
 mysql:
-    database: test
+    database: example
     host: 127.0.0.1
     password: 114514
     port: 3306
