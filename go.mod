@@ -1,4 +1,4 @@
-module viper-nacos-config-example
+module github.com/justlorain/viper-nacos-config-example
 
 go 1.18
 
