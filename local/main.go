@@ -34,6 +34,7 @@ func initViperConfig() {
 	if err != nil {
 		log.Fatalf("viper unmarshal config failed: %v", err)
 	}
+	viper.WatchConfig()
 	wg.Done()
 }
 
