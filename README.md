@@ -8,6 +8,8 @@ An out-of-the-box example of using [Nacos](https://github.com/alibaba/nacos) con
 
 ### Local
 
+[example](./local)
+
 #### Start Nacos
 
 ```shell
@@ -29,6 +31,8 @@ The default username and password is `nacos`.
 
 ### Remote
 
+[example](./remote)
+
 #### Start Nacos
 
 ```shell
@@ -43,8 +47,8 @@ The default username and password is `nacos`.
 
 Add MySQL configuration
 
-- Data ID: example-remote
-- Group:   example-remote
+- Data ID: `example-remote`
+- Group:   `example-remote`
 
 ```yaml
 mysql:
