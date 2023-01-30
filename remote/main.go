@@ -8,9 +8,14 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/spf13/viper"
 	"log"
+	"sync"
+	"time"
 )
 
-var config Config
+var (
+	config Config
+	wg     sync.WaitGroup
+)
 
 const configPath = "./config.yaml"
 
@@ -25,6 +30,7 @@ func initViperConfig() {
 	if err != nil {
 		log.Fatalf("viper unmarshal nacosConfig failed: %v", err)
 	}
+	wg.Done()
 }
 
 func initNacosConfig() {
@@ -52,7 +58,6 @@ func initNacosConfig() {
 		DataId: config.Nacos.DataId,
 		Group:  config.Nacos.Group,
 	})
-
 	err = viper.ReadConfig(bytes.NewBufferString(content))
 	if err != nil {
 		log.Fatal("viper read config failed: ", err)
@@ -61,11 +66,32 @@ func initNacosConfig() {
 	if err != nil {
 		log.Fatalf("viper unmarshal config failed: %v", err)
 	}
-
 	fmt.Println(config)
+
+	err = client.ListenConfig(vo.ConfigParam{
+		DataId: config.Nacos.DataId,
+		Group:  config.Nacos.Group,
+		OnChange: func(namespace, group, dataId, data string) {
+			err := viper.ReadConfig(bytes.NewBufferString(data))
+			if err != nil {
+				log.Fatal("viper read config failed: ", err)
+			}
+			err = viper.Unmarshal(&config)
+			if err != nil {
+				log.Fatalf("viper unmarshal config failed: %v", err)
+			}
+			fmt.Println(config)
+		},
+	})
+	if err != nil {
+		log.Fatalf("nacos listen config failed: %v", err)
+	}
 }
 
 func main() {
-	initViperConfig()
-	initNacosConfig()
+	wg.Add(1)
+	go initViperConfig()
+	wg.Wait()
+	go initNacosConfig()
+	time.Sleep(time.Second * 90)
 }
