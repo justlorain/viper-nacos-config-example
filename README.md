@@ -6,6 +6,8 @@ An out-of-the-box example of using [Nacos](https://github.com/alibaba/nacos) con
 
 ## Quick Start
 
+[中文](https://juejin.cn/post/7194335882232397882)
+
 ### Remote
 
 [example](./remote)
