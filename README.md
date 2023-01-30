@@ -6,29 +6,6 @@ An out-of-the-box example of using [Nacos](https://github.com/alibaba/nacos) con
 
 ## Quick Start
 
-### Local
-
-[example](./local)
-
-#### Start Nacos
-
-```shell
-docker-compose up
-```
-
-#### Run
-
-```shell
-cd local
-go run .
-```
-
-#### Visit Nacos
-
-Visit `127.0.0.1:8848/nacos` on Browser.
-
-The default username and password is `nacos`.
-
 ### Remote
 
 [example](./remote)
@@ -65,6 +42,29 @@ mysql:
 cd remote
 go run .
 ```
+
+### Local
+
+[example](./local)
+
+#### Start Nacos
+
+```shell
+docker-compose up
+```
+
+#### Run
+
+```shell
+cd local
+go run .
+```
+
+#### Visit Nacos
+
+Visit `127.0.0.1:8848/nacos` on Browser.
+
+The default username and password is `nacos`.
 
 ## End
 
