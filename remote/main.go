@@ -19,7 +19,7 @@ var (
 )
 
 const (
-	configPath = "./config.yaml"
+	configPath = "./remote/config.yaml"
 	configType = "yaml"
 )
 

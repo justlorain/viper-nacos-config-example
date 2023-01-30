@@ -1,0 +1,14 @@
+mysql:
+    database: example-local
+    host: 127.0.0.1
+    password: 114514
+    port: 3306
+    username: root
+nacos:
+    dataid: example-local
+    group: example-local
+    host: 127.0.0.1
+    port: 8848
+service:
+    addr: 127.0.0.1:8080
+    name: example
