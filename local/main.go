@@ -19,12 +19,11 @@ var (
 )
 
 const (
-	configPath = "./local/config.yaml"
+	configPath = "./config.yaml"
 	configType = "yaml"
 )
 
 func initViperConfig() {
-	// note: use absolute path
 	viper.SetConfigFile(configPath)
 	// read config
 	err := viper.ReadInConfig()

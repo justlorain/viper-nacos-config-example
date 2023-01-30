@@ -12,10 +12,9 @@ import (
 
 var config Config
 
-const configPath = "./remote/config.yaml"
+const configPath = "./config.yaml"
 
 func initViperConfig() {
-	// note: use absolute path
 	viper.SetConfigFile(configPath)
 	// read nacosConfig
 	err := viper.ReadInConfig()
