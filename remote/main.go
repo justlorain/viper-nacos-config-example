@@ -1,22 +1,16 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
-	"sync"
-	"time"
-
+	"bytes"
+	"fmt"
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/spf13/viper"
+	"log"
 )
 
-var (
-	nacosConfig NacosConfig
-	mysqlConfig MySQLConfig
-	wg          sync.WaitGroup
-)
+var config Config
 
 const configPath = "./remote/config.yaml"
 
@@ -28,17 +22,16 @@ func initViperConfig() {
 	if err != nil {
 		log.Fatalf("viper read nacosConfig failed: %v", err)
 	}
-	err = viper.Unmarshal(&nacosConfig)
+	err = viper.Unmarshal(&config)
 	if err != nil {
 		log.Fatalf("viper unmarshal nacosConfig failed: %v", err)
 	}
-	wg.Done()
 }
 
 func initNacosConfig() {
 	// server nacosConfig
 	sc := []constant.ServerConfig{
-		*constant.NewServerConfig(nacosConfig.Host, uint64(nacosConfig.Port), constant.WithContextPath("/nacos")),
+		*constant.NewServerConfig(config.Nacos.Host, uint64(config.Nacos.Port), constant.WithContextPath("/nacos")),
 	}
 	// client nacosConfig
 	cc := *constant.NewClientConfig(
@@ -57,21 +50,23 @@ func initNacosConfig() {
 	}
 
 	content, err := client.GetConfig(vo.ConfigParam{
-		DataId: nacosConfig.DataId,
-		Group:  nacosConfig.Group,
+		DataId: config.Nacos.DataId,
+		Group:  config.Nacos.Group,
 	})
 
-	err = json.Unmarshal([]byte(content), &mysqlConfig)
+	err = viper.ReadConfig(bytes.NewBufferString(content))
 	if err != nil {
-		log.Fatalf("json unmatshal failed: %v", err)
+		log.Fatal("viper read config failed: ", err)
+	}
+	err = viper.Unmarshal(&config)
+	if err != nil {
+		log.Fatalf("viper unmarshal config failed: %v", err)
 	}
 
+	fmt.Println(config)
 }
 
 func main() {
-	wg.Add(1)
-	go initViperConfig()
-	wg.Wait()
-	go initNacosConfig()
-	time.Sleep(time.Second * 90)
+	initViperConfig()
+	initNacosConfig()
 }

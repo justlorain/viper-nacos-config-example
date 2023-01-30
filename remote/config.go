@@ -1,5 +1,10 @@
 package main
 
+type Config struct {
+	Nacos NacosConfig
+	MySQL MySQLConfig
+}
+
 type NacosConfig struct {
 	Host   string `json:"host"`
 	Port   int    `json:"port"`

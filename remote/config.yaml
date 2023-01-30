@@ -1,6 +1,6 @@
 nacos:
-    dataid: example-remote
-    group: example-remote
     host: 127.0.0.1
     port: 8848
+    dataid: example-remote
+    group: example-remote
 
