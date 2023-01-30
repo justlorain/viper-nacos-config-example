@@ -3,13 +3,14 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
+	"sync"
+	"time"
+
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/spf13/viper"
-	"log"
-	"sync"
-	"time"
 )
 
 var (
