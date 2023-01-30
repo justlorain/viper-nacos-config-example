@@ -11,4 +11,4 @@ nacos:
     port: 8848
 service:
     addr: 127.0.0.1:8080
-    name: example
+    name: example-local

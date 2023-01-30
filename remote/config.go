@@ -1,16 +1,5 @@
 package main
 
-type Config struct {
-	Service ServiceConfig
-	Nacos   NacosConfig
-	MySQL   MySQLConfig
-}
-
-type ServiceConfig struct {
-	Name string `json:"name"`
-	Addr string `json:"addr"`
-}
-
 type NacosConfig struct {
 	Host   string `json:"host"`
 	Port   int    `json:"port"`

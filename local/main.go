@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	config *Config
+	config Config
 	wg     sync.WaitGroup
 )
 
@@ -56,7 +56,7 @@ func initNacosConfig() {
 		},
 	)
 	if err != nil {
-		panic(err)
+		log.Fatalf("create nacos config client failed: %v", err)
 	}
 
 	jsonBytes, err := json.Marshal(config)

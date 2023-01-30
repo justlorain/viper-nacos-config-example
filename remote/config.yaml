@@ -1,14 +1,6 @@
-mysql:
-    database: example
-    host: 127.0.0.1
-    password: 114514
-    port: 3306
-    username: root
 nacos:
-    dataid: example-dataid
-    group: example-group
+    dataid: example-remote
+    group: example-remote
     host: 127.0.0.1
     port: 8848
-service:
-    addr: 127.0.0.1:8080
-    name: example
+

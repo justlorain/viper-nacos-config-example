@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"log"
 	"sync"
@@ -14,36 +13,34 @@ import (
 )
 
 var (
-	config *Config
-	wg     sync.WaitGroup
+	nacosConfig NacosConfig
+	mysqlConfig MySQLConfig
+	wg          sync.WaitGroup
 )
 
-const (
-	configPath = "./remote/config.yaml"
-	configType = "yaml"
-)
+const configPath = "./remote/config.yaml"
 
 func initViperConfig() {
 	// note: use absolute path
 	viper.SetConfigFile(configPath)
-	// read config
+	// read nacosConfig
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatalf("viper read config failed: %v", err)
+		log.Fatalf("viper read nacosConfig failed: %v", err)
 	}
-	err = viper.Unmarshal(&config)
+	err = viper.Unmarshal(&nacosConfig)
 	if err != nil {
-		log.Fatalf("viper unmarshal config failed: %v", err)
+		log.Fatalf("viper unmarshal nacosConfig failed: %v", err)
 	}
 	wg.Done()
 }
 
 func initNacosConfig() {
-	// server config
+	// server nacosConfig
 	sc := []constant.ServerConfig{
-		*constant.NewServerConfig(config.Nacos.Host, uint64(config.Nacos.Port), constant.WithContextPath("/nacos")),
+		*constant.NewServerConfig(nacosConfig.Host, uint64(nacosConfig.Port), constant.WithContextPath("/nacos")),
 	}
-	// client config
+	// client nacosConfig
 	cc := *constant.NewClientConfig(
 		constant.WithNamespaceId(""),
 	)
@@ -56,40 +53,19 @@ func initNacosConfig() {
 		},
 	)
 	if err != nil {
-		panic(err)
+		log.Fatalf("create nacos nacosConfig client failed: %v", err)
 	}
 
-	jsonBytes, err := json.Marshal(config)
-	if err != nil {
-		log.Fatalf("marshal json config failed: %v", err)
-	}
-	_, err = client.PublishConfig(vo.ConfigParam{
-		DataId:  config.Nacos.DataId,
-		Group:   config.Nacos.Group,
-		Content: string(jsonBytes),
+	content, err := client.GetConfig(vo.ConfigParam{
+		DataId: nacosConfig.DataId,
+		Group:  nacosConfig.Group,
 	})
+
+	err = json.Unmarshal([]byte(content), &mysqlConfig)
 	if err != nil {
-		log.Fatalf("nacos publish config failed: %v", err)
+		log.Fatalf("json unmatshal failed: %v", err)
 	}
 
-	err = client.ListenConfig(vo.ConfigParam{
-		DataId: config.Nacos.DataId,
-		Group:  config.Nacos.Group,
-		OnChange: func(namespace, group, dataId, data string) {
-			viper.SetConfigType(configType)
-			err := viper.ReadConfig(bytes.NewBufferString(data))
-			if err != nil {
-				log.Fatal("viper read config failed: ", err)
-			}
-			err = viper.WriteConfigAs(configPath)
-			if err != nil {
-				log.Fatal("viper write config failed: ", err)
-			}
-		},
-	})
-	if err != nil {
-		log.Fatalf("nacos listen config failed: %v", err)
-	}
 }
 
 func main() {
