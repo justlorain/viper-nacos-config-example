@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -31,6 +30,7 @@ func initViperConfig() {
 	if err != nil {
 		log.Fatalf("viper unmarshal nacosConfig failed: %v", err)
 	}
+	viper.WatchConfig()
 	wg.Done()
 }
 
@@ -67,7 +67,7 @@ func initNacosConfig() {
 	if err != nil {
 		log.Fatalf("viper unmarshal config failed: %v", err)
 	}
-	fmt.Println(config)
+	log.Println(config)
 
 	err = client.ListenConfig(vo.ConfigParam{
 		DataId: config.Nacos.DataId,
@@ -81,7 +81,7 @@ func initNacosConfig() {
 			if err != nil {
 				log.Fatalf("viper unmarshal config failed: %v", err)
 			}
-			fmt.Println(config)
+			log.Println(config)
 		},
 	})
 	if err != nil {
