@@ -81,7 +81,6 @@ func initNacosConfig() {
 			if err != nil {
 				log.Printf("viper unmarshal config failed: %v", err)
 			}
-			log.Println(config)
 		},
 	})
 	if err != nil {
