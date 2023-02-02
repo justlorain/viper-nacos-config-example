@@ -79,12 +79,12 @@ func initNacosConfig() {
 			viper.SetConfigType(configType)
 			err := viper.ReadConfig(bytes.NewBufferString(data))
 			if err != nil {
-				log.Fatal("viper read config failed: ", err)
+				log.Printf("viper read config failed: %v", err)
 			}
 			err = viper.WriteConfigAs(configPath)
 			log.Println("apply new config to local")
 			if err != nil {
-				log.Fatal("viper write config failed: ", err)
+				log.Printf("viper write config failed: %v", err)
 			}
 		},
 	})

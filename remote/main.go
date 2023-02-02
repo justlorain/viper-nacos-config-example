@@ -75,11 +75,11 @@ func initNacosConfig() {
 		OnChange: func(namespace, group, dataId, data string) {
 			err := viper.ReadConfig(bytes.NewBufferString(data))
 			if err != nil {
-				log.Fatal("viper read config failed: ", err)
+				log.Printf("viper read config failed: %v", err)
 			}
 			err = viper.Unmarshal(&config)
 			if err != nil {
-				log.Fatalf("viper unmarshal config failed: %v", err)
+				log.Printf("viper unmarshal config failed: %v", err)
 			}
 			log.Println(config)
 		},
